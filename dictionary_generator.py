@@ -89,13 +89,17 @@ def generate_passwords(data):
                     number + base + symbol
                 ])
 
+            clean_screen()
+            print(f"{st.BLUE}{logo}")
+            print(f"{st.GREEN}Generating Passwords. It may take a few minutes\n")
+
             for pwd in candidates:
                 prev_len = len(variants)
                 variants.add(pwd)
 
                 if len(variants) > prev_len:
                     generated_count += 1
-                    print(f"[{generated_count}] Generating passwords: '{pwd}'", end="\r", flush=True)
+                    print(f"[{generated_count}] '{pwd}'", end="\r", flush=True)
 
                     if enable_sleep:
                         time.sleep(0.01)
