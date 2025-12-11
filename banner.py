@@ -16,7 +16,6 @@ menu = r"""
 [2] Brute Force Attack (Sim)
 [3] Get Project Info
 [4] Exit
-
 """
 
 project_info = f"[+] Project Name: KeyBreaker (Sim Mode)\n[+] Version:"

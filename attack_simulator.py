@@ -9,7 +9,7 @@ def load_target_password(password_file="output_password.txt"):
     path = password_file if os.path.isabs(password_file) else os.path.join(os.path.dirname(__file__), password_file)
     if not os.path.exists(path):
         print(f"{st.RED}[ERROR] Create a Dictionary: '{password_file}'")
-        input("Press ENTER to continue... {st.RESET}")
+        input(f"Press ENTER to continue... {st.RESET}")
         return None
    
     with open(path, "r", encoding="utf-8") as f:
@@ -19,7 +19,7 @@ def load_target_password(password_file="output_password.txt"):
                 return pw   
 
     print(f"{st.RED}[ERROR] '{password_file}' is empty")
-    input("Press ENTER to continue... {st.RESET}")
+    input(f"Press ENTER to continue... {st.RESET}")
     return None
 
 def search_password(password_file="output_password.txt"):
@@ -33,7 +33,7 @@ def search_password(password_file="output_password.txt"):
 
     if not os.path.isfile(dictionary):
         print(f"{st.RED}[ERROR] Dictionari '{dictionary} not found")
-        input("Press ENTER to return... {st.RESET}")
+        input(f"{st.GREEN}Press ENTER to return... {st.RESET}")
         return 
 
     with open(dictionary, "r", encoding="utf-8") as f:
@@ -50,7 +50,7 @@ def search_password(password_file="output_password.txt"):
         bar = progress_bar(percent)
         status = f"[{i:03}] {bar} {int(percent * 100)}% | Trying: '{tries}'"
         print(status, end="\r", flush=True)
-        time.sleep(0.05)
+        time.sleep(0.01)
 
         if tries == target_password:
             clean_screen()
@@ -59,6 +59,8 @@ def search_password(password_file="output_password.txt"):
             input(f"Press ENTER to continue... {st.RESET}")
             return
 
+    clean_screen()
+    print(f"{st.BLUE}{logo}")
     print(f"{st.RED}[ERROR] Password not found")
-    input("{st.GREEN}Press ENTER to continue... {st.RESET}")
+    input(f"{st.GREEN}Press ENTER to continue... {st.RESET}")
 
