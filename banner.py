@@ -19,22 +19,22 @@ menu = r"""
 
 """
 
-info = r"""
-[+] Project Name: KeyBreaker (Simulation Mode)
+project_info = f"[+] Project Name: KeyBreaker (Sim Mode)\n[+] Version:"
+
+autor_info = r"""
 [+] Autor: Alister
 [+] GitHub: https://github.com/alisster00
 [+] Email: akaristr@protonmail.com
-
 """
-
 def check_version():
     with open("version.json", "r", encoding="utf-8") as file:
         version = json.load(file)
         return f"{version['version']}"
 
 def get_info():
-    print(info)
-    input("Press ENTER to go back")
+    print(f"{st.GREEN}{logo}")
+    print(project_info, check_version(), autor_info)
+    input("Press ENTER to return... ")
 
 def show_banner():
     print(f"{st.BLUE}{logo}")
