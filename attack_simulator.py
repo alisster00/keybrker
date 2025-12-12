@@ -31,6 +31,9 @@ def search_password(password_file="output_password.txt"):
     print(f"{st.GREEN}[!] Choose the dictionary to search")
     dictionary = input(f"[*] Enter dictionary filename (e.g. 'dict1.txt'):{st.RESET} ").strip()
 
+    if "." not in dictionary:
+        dictionary = dictionary + ".txt"
+
     if not os.path.isfile(dictionary):
         print(f"{st.RED}[ERROR] Dictionari '{dictionary} not found")
         input(f"{st.GREEN}Press ENTER to return... {st.RESET}")
