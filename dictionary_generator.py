@@ -132,9 +132,13 @@ def target_pass(passwords, output_file="output_password.txt"):
 
 def dictionary_generator():
     user_info = user_data_request()
+
     output_name = input(f"{st.GREEN}[*] Output file name (default: 'dictionary.txt'):{st.RESET} ").strip()
     if not output_name:
         output_name = "dictionary.txt"
+
+    elif "." not in output_name:
+        output_name = output_name + ".txt"
 
     gen_passwords = generate_passwords(user_info)
 
