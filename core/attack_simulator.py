@@ -1,13 +1,14 @@
-import os
+from pathlib import Path
 import time 
-from styles import Styles as st 
-from utils import progress_bar, clean_screen
-from banner import logo
-
+from ui.styles import Styles as st 
+from ui.banner import logo
+from utils.helper import progress_bar, clean_screen
+from utils.paths import project_root
 
 def load_target_password(password_file="output_password.txt"):
-    path = password_file if os.path.isabs(password_file) else os.path.join(os.path.dirname(__file__), password_file)
-    if not os.path.exists(path):
+    path = project_root / password_file
+
+    if not path.exists():
         print(f"{st.RED}[ERROR] Create a Dictionary: '{password_file}'")
         input(f"Press ENTER to continue... {st.RESET}")
         return None
@@ -31,15 +32,17 @@ def search_password(password_file="output_password.txt"):
     print(f"{st.GREEN}[!] Choose the dictionary to search")
     dictionary = input(f"[*] Enter dictionary filename (e.g. 'dict1.txt'):{st.RESET} ").strip()
 
-    if "." not in dictionary:
-        dictionary = dictionary + ".txt"
+    if not dictionary.endswith(".txt"):
+        dictionary += ".txt"
 
-    if not os.path.isfile(dictionary):
+    dict_path = project_root / dictionary
+
+    if not dict_path.exists():
         print(f"{st.RED}[ERROR] Dictionari '{dictionary} not found")
         input(f"{st.GREEN}Press ENTER to return... {st.RESET}")
         return 
 
-    with open(dictionary, "r", encoding="utf-8") as f:
+    with dict_path.open("r", encoding="utf-8") as f:
         lines = [line.strip() for line in f if line.strip()]
 
     total = len(lines)

@@ -1,8 +1,8 @@
-from utils import clean_screen
-from banner import show_banner, get_info, logo
-from styles import Styles as st 
-from dictionary_generator import dictionary_generator
-from attack_simulator import search_password, load_target_password
+from utils.helper import clean_screen
+from ui.banner import show_banner, get_info, logo
+from ui.styles import Styles as st 
+from core.dictionary_generator import dictionary_generator
+from core.attack_simulator import search_password, load_target_password
 
 def main_menu():
     while True:

@@ -1,5 +1,5 @@
 import json
-from styles import Styles as st 
+from ui.styles import Styles as st 
 
 logo = r"""
  _  __          ____       _             

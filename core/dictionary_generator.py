@@ -2,25 +2,89 @@ import time
 import random
 import itertools
 from datetime import datetime
-from styles import Styles as st
-from banner import logo
-from utils import clean_screen
+from ui.styles import Styles as st
+from ui.banner import logo
+from utils.helper import clean_screen
+from core.prompts import input_only_letters, input_letters_numbers, input_optional_date, input_multiple_names
 
 symbols = ['!', '@', '#', '$', '%', '&', '*', '?']
 
 def user_data_request():
     print(f"{st.BLUE}{logo}")
-    name = input(f"{st.GREEN}[+] First name:{st.RESET} ").strip()
-    last_name = input(f"{st.GREEN}[+] Last name:{st.RESET} ").strip()
-    nickname = input(f"{st.GREEN}[+] Nickname:{st.RESET} ").strip()
-    birthday = input(f"{st.GREEN}[+] Birthday (DDMMYYYY):{st.RESET} ").strip()
 
+    first_name = input_only_letters(f"{st.GREEN}[+] First name:{st.RESET} ")
+    last_name = input_only_letters(f"{st.GREEN}[+] Last name:{st.RESET} ")
+    nickname = input_letters_numbers(f"{st.GREEN}[+] Nickname:{st.RESET} ")
+    username = input_letters_numbers(f"{st.GREEN}[+] Username (optional): {st.RESET}")
+    
+    partner_name = input_only_letters(f"{st.GREEN}[+] Parner name (optional): {st.RESET}")
+
+    pet_names = input_multiple_names(f"{st.GREEN}[+] Pet names (coma separated, optional): {st.RESET}")
+
+    birthday = input_optional_date(f"{st.GREEN}[+] Birthday (DDMMYYYY):{st.RESET} ")
+    
     return {
-        "name": name,
-        "last_name": last_name,
-        "nickname": nickname,
-        "birthday": birthday
+        "personal": {
+            "name": first_name,
+            "last_name": last_name,
+            "nickname": nickname,
+        },
+        "family": {
+            "partner": partner_name,
+            "pets": pet_names
+        },
+        "digital": {
+            "username": username
+        },
+        "dates": {
+            "birth": birthday
+        }
     }
+
+def build_parts(user_data):
+    parts = []
+
+    personal = user_data.get("personal", {})
+    for key in ("first_name", "last_name", "nickname"):
+        value = personal.get(key)
+        if value:
+            parts.append(value)
+
+    family = user_data.get("family", {})
+    partner = family.get("partner")
+    if partner:
+        parts.append(partner)
+    pets = family.get("pets", [])
+    for pet in pets:
+        parts.append(pet)
+
+    digital = user_data.get("digital", {})
+    username = digital.get("username")
+    if username:
+        parts.append(username)  
+
+    dates = user_data.get("dates", {})
+    birthday = dates.get("birth")
+
+    if birthday:
+        date_info = process_date(birthday)
+        if date_info:
+            parts.extend([
+                date_info["day"],
+                date_info["month_num"],
+                date_info["month_name"],
+                date_info["year"],
+                date_info["year_short"]
+            ])
+
+    seen = set()
+    clean_parts = []
+    for p in parts:
+        if p not in seen:
+            seen.add(p)
+            clean_parts.append(p)
+
+    return clean_parts
 
 def process_date(date_str):
     try:
@@ -37,30 +101,13 @@ def process_date(date_str):
         print(f"\n{st.YELLOW}[WARNING] Invalid date entered.{st.RESET}\n")
         return None
 
-def generate_passwords(data):
-    date_info = process_date(data.get("birthday", "").strip())
-    
-    parts = [
-        data.get("name", "").strip(),
-        data.get("last_name", "").strip(),
-        data.get("nickname", "").strip(),
-    ]
-
-    parts = [p for p in parts if p]
-
-    if date_info:
-        parts.extend([
-            date_info["day"],
-            date_info["month_num"],
-            date_info["month_name"],
-            date_info["year"],
-            date_info["year_short"]
-        ])
+def generate_passwords(user_data):
+    parts = build_parts(user_data)
 
     if len(parts) < 2:
         clean_screen()
         print(f"{st.BLUE}{logo}")
-        print(f"{st.RED}[ERROR] Not enough data to generate passwords. {st.RESET}\n")
+        print(f"{st.RED}[ERROR] Not enough user_data to generate passwords. {st.RESET}\n")
         input(f"{st.GREEN}Press ENTER to continue... {st.RESET}")
         return []
 
@@ -78,6 +125,7 @@ def generate_passwords(data):
                 base.capitalize(), 
                 base.upper()
             ]
+            #build_parts(user_data)
 
             for _ in range(3):
                 symbol = random.choice(symbols)
