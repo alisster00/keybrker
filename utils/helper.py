@@ -1,4 +1,6 @@
 import os
+from ui.banner import logo
+from ui.styles import Styles as st
 
 def clean_screen():
     os.system("clear" if os.name == "posix" else "cls")
@@ -9,5 +11,3 @@ def progress_bar(percent, width=20):
     a = "#"
     b = "-"
     return f"[{a * progress}{b * (width - progress)}]"
-
-
