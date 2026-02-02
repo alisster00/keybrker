@@ -3,21 +3,21 @@ import time
 from ui.styles import Styles as st 
 from ui.banner import logo
 from utils.helper import progress_bar, clean_screen
-from utils.paths import project_root
+from utils.paths import (data_dir, dictionaries_dir)
 
 def load_target_password(password_file="output_password.txt"):
-    path = project_root / password_file
+    path = data_dir / password_file
 
     if not path.exists():
         print(f"{st.RED}[ERROR] Create a Dictionary: '{password_file}'")
         input(f"Press ENTER to continue... {st.RESET}")
         return None
    
-    with open(path, "r", encoding="utf-8") as f:
+    with path.open("r", encoding="utf-8") as f:
         for line in f:
             pw = line.strip()
             if pw:
-                return pw   
+                return pw
 
     print(f"{st.RED}[ERROR] '{password_file}' is empty")
     input(f"Press ENTER to continue... {st.RESET}")
@@ -35,7 +35,7 @@ def search_password(password_file="output_password.txt"):
     if not dictionary.endswith(".txt"):
         dictionary += ".txt"
 
-    dict_path = project_root / dictionary
+    dict_path = dictionaries_dir / dictionary
 
     if not dict_path.exists():
         print(f"{st.RED}[ERROR] Dictionari '{dictionary} not found")
