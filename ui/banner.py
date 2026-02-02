@@ -23,7 +23,7 @@ project_info = f"[+] Project Name: KeyBreaker (Sim Mode)\n[+] Version:"
 autor_info = r"""
 [+] Autor: Alister
 [+] GitHub: https://github.com/alisster00
-[+] Email: akaristr@protonmail.com
+[+] Email: alister00@proton.me
 """
 def check_version():
     with open("version.json", "r", encoding="utf-8") as file:
